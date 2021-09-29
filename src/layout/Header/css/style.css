@@ -1,0 +1,13 @@
+.page-header{
+  background-image: url('../img/bg.jpg');
+  background-repeat: no-repeat;
+  position: relative;
+  height: 29vh;
+  overflow: hidden;
+  background-position: center center;
+  background-size: cover;
+}
+.bg-page {
+  background-color: rgba(0, 123, 255, 1);
+  height: 81vh;
+}
