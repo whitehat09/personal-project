@@ -246,8 +246,11 @@ const DashboardProducts = () => {
                           <Button
                             variant="contained"
                             color="success"
-                            onClick={() =>
-                              history.push(`/admin/updateproduct/${row.id}`)
+                            onClick={() =>{
+                              
+                               history.push(`/admin/updateproduct/${row.id}`)
+                            }
+                             
                             }
                             // onClick={() =>
                             //   updateDocument("products", row.id, {

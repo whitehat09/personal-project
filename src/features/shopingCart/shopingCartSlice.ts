@@ -6,12 +6,7 @@ interface InitialState {
 }
 const initialState: InitialState = {
   dataShopingCart:[
-  //   {category: [],
-  //   price: '',
-  //   id: '',
-  //   image: '',
-  //   productName:'',
-  //  }
+  
   ]
  
 };
@@ -24,28 +19,29 @@ export const authSlice = createSlice({
   name: "shopingCart",
   initialState,
   reducers: {
-    getShopingCart: (state, action) => {//
+    getShopingCart: (state,action) => {//
       let temp = action.payload;
       if(idExists(temp.id, state.dataShopingCart)){
         return;
       }else{
-        state.dataShopingCart.push(temp)
+        state.dataShopingCart.push(temp);
       }
     },
-    deleteShopingCart: (state, action) => {// 
+    deleteShopingCart: (state,action) => {// 
       let temp = action.payload;
       if(idExists(temp.id, state.dataShopingCart)){
-        state.dataShopingCart.pop(temp)
+        state.dataShopingCart.pop(temp);
         return;
-      }else{
-        
       }
     },
-    
+    restart: (state, action) =>{
+      state.dataShopingCart=[];
+    },
   },
 });
 export const { getShopingCart  } = authSlice.actions;
 export const { deleteShopingCart  } = authSlice.actions;
+export const { restart  } = authSlice.actions;
 
 
 

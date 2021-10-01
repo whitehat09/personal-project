@@ -1,4 +1,4 @@
-import firebase, { db } from "../config";
+import { db } from "../config";
 
 const updateDocument = (collection, id, data) => {
   const query = db.collection(collection);

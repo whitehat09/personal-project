@@ -1,4 +1,4 @@
-import firebase, { db } from "../config";
+import  { db } from "../config";
 
 const deleteDocument = (collection, id) => {
   const query = db.collection(collection);

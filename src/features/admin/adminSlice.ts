@@ -15,28 +15,28 @@ const initialState: InitialState = {
 
  
 };
-const  idExists=(value:any,array:Array<[]>) => {
-  return array.some((item:any)=> {
-    return item.id === value;
-  }); 
-};
+
 export const authSlice = createSlice({
   name: "admin",
   initialState,
   reducers: {
    
     signInAdmin: (state, action) => {// 
-      
       if(state.admin.email === action.payload.email &&state.admin.password === action.payload.password){
         state.isLoginAdmin=true;
       }
-      
+      else{
+        state.errorMessage='tài khoản hoặc mật khẩu sai !';
+      }
+    },
+    loginAdmin: (state) => {// 
+      state.isLoginAdmin=false;
     },
     
   },
 });
 export const { signInAdmin  } = authSlice.actions;
-export const {   } = authSlice.actions;
+export const {  loginAdmin } = authSlice.actions;
 
 
 

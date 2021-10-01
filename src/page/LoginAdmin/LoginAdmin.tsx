@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
-import { logIn, showHeaderAdmin } from "../../features/auth/authSlice";
-import { facebookProvider, googleProvider } from "../../firebase/authMethods";
-import { auth } from "../../firebase/config";
-import socialMediaAuth from "../../firebase/service/auth";
+import {  showHeaderUser } from "../../features/auth/authSlice";
+
 import { Formik, Field, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import "./style.css";
@@ -18,11 +16,11 @@ const LoginAdmin = () => {
     return state.adminReducer;
   });
   useEffect(() => {
+    dispatch({ type: showHeaderUser.type });
     if (isLoginAdmin) {
-      dispatch({ type: showHeaderAdmin.type });
-      history.push("/admin/dashboardusers");
+      history.push("/admin/dashboardproducts");
     }
-  }, [isLoginAdmin, history]);
+  }, [isLoginAdmin, history,dispatch]);
   let firstvalue = {
     email: "",
     password: "",

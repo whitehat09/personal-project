@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { auth } from "../../firebase/config";
-import addDocument from "../../firebase/service/addDocument";// add db
+
 
 interface InitialState {
   dataUser: any;

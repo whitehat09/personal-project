@@ -13,7 +13,6 @@ const Home = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  
   useEffect(() => {
     db.collection("products").onSnapshot((snapshot: any) => {
       const data = snapshot.docs.map((doc: any) => ({
@@ -23,7 +22,6 @@ const Home = () => {
       setPosts(data);
       dispatch({ type: getProducts.type, payload: data });
       dispatch({ type: showHeaderUser.type });
-      console.log("home", { data, snapshot, docs: snapshot.docs });
     });
   }, [dispatch]);
   return (
@@ -32,13 +30,13 @@ const Home = () => {
         <div className="container">
           <div className="row p-5  ">
             {posts.map((item: any) => (
-              <div className="col-4" key={item.id}>
+              <div className="col-4 mt-4" key={item.id}>
                 <div className="card ">
                   <img
                     className="card-img-top img-responsive"
                     src={item.image}
                     alt="product"
-                    style={{ height: "210px" }}
+                    style={{ height: "319px" }}
                   />
                   <div className="card-body">
                     <h5 className="card-title">{item.productName}</h5>

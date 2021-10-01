@@ -7,6 +7,7 @@ import { facebookProvider, googleProvider } from "../../firebase/authMethods";
 import { auth } from "../../firebase/config";
 import socialMediaAuth from "../../firebase/service/auth";
 import addDocument from "../../firebase/service/addDocument"; // add db
+
 const Login = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -15,17 +16,17 @@ const Login = () => {
   });
   const handleOnClick = async (provider: any) => {
     const res = await socialMediaAuth(provider);
-    console.log("ping", res?.providerData[0]); // data user trả về sau khi đăng nhập
   };
+
   useEffect(() => {
     const unsubscibed = auth.onAuthStateChanged((res: any) => {
       if (res) {
         let data = {
-          displayName: res.providerData[0]?.displayName,
-          email: res.providerData[0]?.email,
-          photoURL: res.providerData[0]?.photoURL,
-          uid: res.providerData[0]?.uid,
-          providerId: res.providerData[0]?.providerId,
+          displayName: res.displayName,
+          email: res.email,
+          photoURL: res.photoURL,
+          uid: res.uid,
+          providerId: res.providerId,
         };
         addDocument("users", data);
 

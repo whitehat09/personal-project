@@ -10,17 +10,37 @@ import {
 } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { showHeaderAdmin } from "../../features/auth/authSlice";
 import { useAppDispatch } from "../../app/hooks";
 import "./style.css";
-import addDocument from "../../firebase/service/addDocument";
-const AddProduct = () => {
+
+import { useParams } from "react-router-dom";
+import { db } from "../../firebase/config";
+
+import updateDocument from "../../firebase/service/updateDocument";
+
+const UpdateProduct = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
+  let { id }: any = useParams();
+  const [productDetail, setProductDetail] = useState<any[]>([
+    { productName: "", image: "", description: "", price: "", category: [] },
+  ]);
   useEffect(() => {
     dispatch({ type: showHeaderAdmin.type });
-  }, [dispatch]);
+    db.collection("products").onSnapshot((snapshot: any) => {
+      const data = snapshot.docs.map((doc: any) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      const result = data.filter((item: any) => item.id === `${id}`); // filter id product
+      console.log("result[0]", result);
+      console.log("data", data);
+      setProductDetail(result);
+    });
+  }, [dispatch, id]);
+
   const validate = Yup.object().shape({
     productName: Yup.string()
       .max(25, "Must be 25 characters or less")
@@ -29,13 +49,7 @@ const AddProduct = () => {
     description: Yup.string().required("Required !"),
     price: Yup.string().required("Required !"),
   });
-  let firstvalue: any = {
-    productName: "",
-    image: "",
-    description: "",
-    price: "",
-    category: [] as string[],
-  };
+
   return (
     <>
       <section>
@@ -44,14 +58,15 @@ const AddProduct = () => {
             <div className="col-6">
               <Formik
                 enableReinitialize
-                initialValues={firstvalue}
+                initialValues={productDetail[0]}
                 validationSchema={validate}
                 onSubmit={(values) => {
                   setTimeout(() => {
-                    addDocument("products", values);
-                    alert("Thêm sản phẩm thành công");
+                    updateDocument("products", id, values);
+                    alert("Sửa sản phẩm thành công");
                     history.push(`/admin/dashboardproducts`);
                   }, 1000);
+                  console.log("data add", values);
                 }}
               >
                 {(
@@ -70,7 +85,7 @@ const AddProduct = () => {
                         className="btn btn-success"
                         disabled={!form.isValid || !form.dirty}
                       >
-                        Thêm sản phẩm
+                        Sửa sản phẩm
                       </button>
                       <button
                         type="button"
@@ -81,7 +96,7 @@ const AddProduct = () => {
                       </button>
                       <div className="form-group">
                         <label
-                          className="font-weight-bold mt-2"
+                          className="font-weight-bold"
                           htmlFor="exampleFieldProductName"
                         >
                           Tên sản phẩm
@@ -95,9 +110,7 @@ const AddProduct = () => {
                         />
                         {form.touched.productName &&
                           form.errors.productName && (
-                            <div className="text-errors">
-                              {form.errors.productName}
-                            </div>
+                            <div>{form.errors.productName}</div>
                           )}
                       </div>
                       <div className="form-group">
@@ -114,7 +127,7 @@ const AddProduct = () => {
                           id="exampleFieldImage"
                         />
                         {form.touched.image && form.errors.image && (
-                          <div className="text-errors">{form.errors.image}</div>
+                          <div>{form.errors.image}</div>
                         )}
                         {form.values.image ? (
                           <img
@@ -138,10 +151,9 @@ const AddProduct = () => {
                           id="exampleFieldPrice"
                         />
                         {form.touched.price && form.errors.price && (
-                          <div className="text-errors">{form.errors.price}</div>
+                          <div>{form.errors.price}</div>
                         )}
                       </div>
-
                       <div className="form-group">
                         <label
                           className="font-weight-bold"
@@ -163,9 +175,7 @@ const AddProduct = () => {
                         </FastField>
                         {form.touched.description &&
                           form.errors.description && (
-                            <div className="text-errors">
-                              {form.errors.description}
-                            </div>
+                            <div>{form.errors.description}</div>
                           )}
                       </div>
 
@@ -224,4 +234,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

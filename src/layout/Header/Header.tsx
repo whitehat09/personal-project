@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
+import { loginAdmin } from "../../features/admin/adminSlice";
 import { logOut } from "../../features/auth/authSlice";
 
 import "./css/style.css";
@@ -16,9 +17,6 @@ const Header = () => {
     return state.shopingCartReducer;
   });
   const dispatch = useAppDispatch();
-
-  console.log("showHeader", showHeader);
-
   return (
     <>
       {showHeader ? (
@@ -44,11 +42,6 @@ const Header = () => {
                   id="navbarSupportedContent"
                 >
                   <ul className="navbar-nav ml-auto">
-                    <li className="nav-item active">
-                      <NavLink to="/admin/dashboardusers" className="nav-link">
-                        Người dùng <span className="sr-only">(current)</span>
-                      </NavLink>
-                    </li>
                     <li className="nav-item">
                       <NavLink
                         to="/admin/dashboardproducts"
@@ -94,7 +87,7 @@ const Header = () => {
                         <NavLink
                           to="/"
                           className="dropdown-item"
-                          onClick={() => dispatch({ type: logOut.type })}
+                          onClick={() => dispatch({ type: loginAdmin.type })}
                         >
                           Đăng xuất
                         </NavLink>

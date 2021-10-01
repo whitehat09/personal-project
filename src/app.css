@@ -12,4 +12,14 @@
     position: relative;
     z-index: 3;
     min-height: calc(100vh - 322px) ;
+
+}
+.text-long{
+    white-space: nowrap; 
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+.text-errors{
+    color: red;
 }

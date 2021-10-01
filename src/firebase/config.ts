@@ -1,3 +1,4 @@
+
 import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
@@ -19,6 +20,7 @@ firebase.analytics();
 
 const auth = firebase.auth();
 const db = firebase.firestore();
+// const admin = firebase.admin();
 
 auth.useEmulator('http://localhost:9099');// không dùng trực tiếp mà dùng Emulator
 if(window.location.hostname ==='localhost'){

@@ -15,27 +15,20 @@ const ProductDetails = () => {
   const [productDetail, setProductDetail] = useState<any[]>([]);
   useEffect(() => {
     const result = dataProducts.filter((item: any) => item.id === `${id}`); // filter id product
-
-    // db.collection("products").onSnapshot((snapshot: any) => {
-    //   const data = snapshot.docs.map((doc: any) => ({
-    //     ...doc.data(),
-    //     id: doc.id,
-    //   }));
-    //   const result = data.filter((item: any) => item.id == `${id}`); // filter id product
-    //   console.log(result);
     setProductDetail(result);
-    console.log("dataProducts", productDetail[0]?.productName);
-    // });
-  }, [dataProducts, id]);
-  // const temp = productDetail[0];
-  // console.log("ping", temp.image);
+  }, [dataProducts, id, productDetail]);
+
   return (
     <>
       <section>
         <div className="container">
           <div className="row p-5  ">
             <div className="col-6">
-              <img src={productDetail[0]?.image} alt="productDetail" />
+              <img
+                src={productDetail[0]?.image}
+                alt="productDetail"
+                style={{ width: "100%" }}
+              />
             </div>
             <div className="col-6">
               <h2>{productDetail[0]?.productName}</h2>

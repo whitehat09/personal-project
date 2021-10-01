@@ -186,7 +186,7 @@ const DashboardOrders = () => {
           <div className="row p-2  ">
             <TableContainer component={Paper}>
               <Table
-                sx={{ minWidth: 500 }}
+                sx={{ minWidth: 575 }}
                 aria-label="custom pagination table"
               >
                 <TableHead>
@@ -195,9 +195,7 @@ const DashboardOrders = () => {
                     <StyledTableCell align="right">
                       Id người đặt
                     </StyledTableCell>
-                    <StyledTableCell align="right">
-                      tên người đặt
-                    </StyledTableCell>
+                    <StyledTableCell align="right">tên</StyledTableCell>
                     <StyledTableCell align="right">
                       nhà cung cấp
                     </StyledTableCell>
@@ -215,48 +213,40 @@ const DashboardOrders = () => {
                     : orders
                   ).map((row: any) => (
                     <TableRow key={row.id}>
-                      <TableCell component="th" scope="row">
+                      <TableCell
+                        className="text-long"
+                        component="th"
+                        style={{ width: 100 }}
+                        scope="row"
+                      >
+                        {row.User.uid}
+                      </TableCell>
+                      <TableCell
+                        className="text-long"
+                        style={{ width: 100 }}
+                        align="right"
+                      >
                         {row.id}
                       </TableCell>
-                      <TableCell style={{ width: 160 }} align="right">
-                        {row.productName}
+                      <TableCell style={{ width: 100 }} align="right">
+                        {row.User.displayName}
                       </TableCell>
-                      <TableCell style={{ width: 160 }} align="right">
-                        <img
-                          src={row.image}
-                          alt="displayName"
-                          style={{
-                            width: "80px",
-                            height: "auto",
-                          }}
-                        />
+                      <TableCell style={{ width: 80 }} align="right">
+                        {row.User.providerId}
                       </TableCell>
-                      <TableCell style={{ width: 160 }} align="right">
-                        {row.description}
+                      <TableCell style={{ width: 100 }} align="right">
+                        {row.order.length}
                       </TableCell>
-                      <TableCell style={{ width: 160 }} align="right">
-                        {row.category}
-                      </TableCell>
-                      <TableCell style={{ width: 160 }} align="right">
-                        {row.price}
+                      <TableCell style={{ width: 100 }} align="right">
+                        {row.totalMoney}
                       </TableCell>
                       <TableCell style={{ width: 240 }} align="right">
                         <Stack spacing={2} direction="row">
                           <Button
                             variant="contained"
                             onClick={() =>
-                              history.push(`/admin/updateproduct/${row.id}`)
+                              history.push(`/admin/ordersdetails/${row.id}`)
                             }
-                            // onClick={() =>
-                            //   updateDocument("products", row.id, {
-                            //     productName: "a",
-                            //     image:
-                            //       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3ydV8wLPF5eyPAf8r4tB_ozHVP9IffgwLPA&usqp=CAU",
-                            //     description: "a",
-                            //     price: "2000",
-                            //     category: ["latop"],
-                            //   })
-                            // }
                           >
                             chi tiết
                           </Button>

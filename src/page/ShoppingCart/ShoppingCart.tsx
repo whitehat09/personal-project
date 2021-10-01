@@ -1,17 +1,20 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { useEffect, useMemo, useState } from "react";
+import { useHistory } from "react-router";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { RootState } from "../../app/store";
-import { deleteShopingCart } from "../../features/shopingCart/shopingCartSlice";
+import {
+  deleteShopingCart,
+  restart,
+} from "../../features/shopingCart/shopingCartSlice";
 import addDocument from "../../firebase/service/addDocument"; // add db
 
 function ShoppingCart() {
   const dispatch = useAppDispatch();
-  let { uid }: any = useParams();
+
   const { dataShopingCart } = useAppSelector((state: RootState) => {
     return state.shopingCartReducer;
   });
-  const [totalMoney, setTotalMoney] = useState(0);
+
   const { isLogin, dataUser } = useAppSelector(
     (state: RootState) => state.authReducer
   );
@@ -22,30 +25,35 @@ function ShoppingCart() {
       history.push("/signin");
     }
   }, [history, isLogin]);
+
   const useDataShopingCart = useMemo(() => {
-    // let result = 0;
-    // for (let i = 0; i < useDataShopingCart.length; i++) {
-    //   result = result + useDataShopingCart[i].quantity;
-    // }
-    // setTotalMoney(result);
     return dataShopingCart.map((item: any) => {
       return {
         id: item.id,
         quantity: 1,
         price: item.price,
+        image: item.image,
+        productName: item.productName,
+        description: item.description,
+        category: item.category,
       };
     });
   }, [dataShopingCart]);
-  // useMemo(() => {
-  //   let result = 0;
-  //   for (let i = 0; i < useDataShopingCart.length; i++) {
-  //     result = result + useDataShopingCart[i].quantity;
-  //   }
-  //   console.log(result);
-  //   setTotalMoney(result);
-  // }, [useDataShopingCart, dataShopingCart]);
 
-  console.log(useDataShopingCart);
+  const initvalue = (array: any) => {
+    let result = 0;
+    for (let i = 0; i < array.length; i++) {
+      result = result + Number(array[i].price);
+    }
+    return result;
+  };
+  const [totalMoney, setTotalMoney] = useState(initvalue(useDataShopingCart));
+  console.log("totalMoney", totalMoney);
+  const showTotal = useMemo(() => {
+    let result = totalMoney;
+
+    return result;
+  }, [totalMoney]);
 
   return (
     <>
@@ -54,7 +62,6 @@ function ShoppingCart() {
           <table className="table table-borderless">
             <thead>
               <tr>
-                <th scope="col">#</th>
                 <th scope="col">Tên sản phẩm</th>
                 <th scope="col">hình ảnh</th>
                 <th scope="col">số lượng</th>
@@ -65,7 +72,6 @@ function ShoppingCart() {
             <tbody>
               {dataShopingCart.map((item: any) => (
                 <tr>
-                  <th scope="row">1</th>
                   <td>{item?.productName}</td>
                   <td>
                     <img
@@ -100,7 +106,7 @@ function ShoppingCart() {
                                 useDataShopingCart[i].price
                             );
                         }
-                        console.log(result);
+                        console.log("setTotalMoney", result);
                         setTotalMoney(result);
                       }}
                     />
@@ -109,12 +115,13 @@ function ShoppingCart() {
                   <td>
                     <i
                       className="far fa-trash-alt"
-                      onClick={() =>
+                      onClick={() => {
                         dispatch({
                           type: deleteShopingCart.type,
                           payload: item,
-                        })
-                      }
+                        });
+                        // setTotalMoney(initvalue(useDataShopingCart));
+                      }}
                     ></i>
                   </td>
                 </tr>
@@ -123,16 +130,30 @@ function ShoppingCart() {
           </table>
           <div className="row d-flex justify-content-end mt-5 p-5">
             <p className="pt-1 mr-2">
-              Tổng số tiền phải thanh toán : {totalMoney} VNĐ
+              Tổng số tiền phải thanh toán : {totalMoney}
             </p>
+            {/* initvalue(useDataShopingCart) */}
             <button
               className="btn btn-primary text-white"
               onClick={() => {
-                console.log(uid);
-                addDocument("orders", {
-                  User: dataUser,
-                  order: useDataShopingCart,
-                });
+                if (dataShopingCart.length === 0) {
+                  setTimeout(() => {
+                    alert("bạn chưa có sản phẩm. Hãy thêm sản phẩm !");
+                    history.push(`/`);
+                  }, 500);
+                  return;
+                } else {
+                  setTimeout(() => {
+                    addDocument("orders", {
+                      User: dataUser,
+                      order: useDataShopingCart,
+                      totalMoney: totalMoney,
+                    });
+                    dispatch({ type: restart.type });
+                    alert("Thêm sản phẩm thành công");
+                    history.push(`/`);
+                  }, 1000);
+                }
               }}
             >
               Đặt hàng
